@@ -1,5 +1,5 @@
 import streamlit as st
 
-st.set_page_config(page_title="Halo",layout="centered")
 st.title("hello world")
+st.set_page_config(page_title="Halo",layout="centered")
 st.write("ican sihermanb")
