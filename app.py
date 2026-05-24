@@ -94,16 +94,3 @@ fig = px.line(
 )
 
 st.plotly_chart(fig, use_container_width=True)
-
-    # ======================================
-    # DOWNLOAD BUTTON
-    # ======================================
-
-    csv = result.to_csv(index=False)
-
-    st.download_button(
-        label="Download Forecast CSV",
-        data=csv,
-        file_name='forecast.csv',
-        mime='text/csv'
-    )
