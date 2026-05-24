@@ -6,3 +6,4 @@ prophet
 statsmodels
 scikit-learn
 openpyxl
+cmdstanpy
