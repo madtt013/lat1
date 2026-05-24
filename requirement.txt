@@ -1,9 +1,6 @@
 streamlit
 pandas
 numpy
-plotly
-prophet
 statsmodels
 scikit-learn
 openpyxl
-cmdstanpy
