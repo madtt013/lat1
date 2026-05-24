@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 
 from forecast import run_forecast
 
@@ -80,17 +79,6 @@ if uploaded_file:
         kategori
     )
 
-    # ======================================
-    # VISUALISASI
-    # ======================================
+st.subheader("Detail Forecast Produk")
 
-    st.subheader("Grafik Forecast")
-
-fig = px.line(
-    filtered,
-    x='tanggal',
-    y='forecast',
-    title=f'Forecast Produk {selected_produk}'
-)
-
-st.plotly_chart(fig, use_container_width=True)
+st.dataframe(filtered)
