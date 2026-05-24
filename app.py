@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 from forecast import run_forecast
 
@@ -86,22 +86,14 @@ if uploaded_file:
 
     st.subheader("Grafik Forecast")
 
-    fig, ax = plt.subplots(figsize=(10,5))
+fig = px.line(
+    filtered,
+    x='tanggal',
+    y='forecast',
+    title=f'Forecast Produk {selected_produk}'
+)
 
-    ax.plot(
-        filtered['tanggal'],
-        filtered['forecast']
-    )
-
-    ax.set_xlabel("Tanggal")
-    ax.set_ylabel("Forecast")
-    ax.set_title(
-        f"Forecast Produk {selected_produk}"
-    )
-
-    plt.xticks(rotation=45)
-
-    st.pyplot(fig)
+st.plotly_chart(fig, use_container_width=True)
 
     # ======================================
     # DOWNLOAD BUTTON
