@@ -1,8 +1,8 @@
 streamlit
 pandas
 numpy
-matplotlib==3.8.4
+matplotlib
 statsmodels
 scikit-learn
-openpyxl
 scipy
+openpyxl
