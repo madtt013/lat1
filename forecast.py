@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+from prophet import Prophet
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 from sklearn.preprocessing import StandardScaler
@@ -8,7 +9,7 @@ from sklearn.cluster import KMeans
 
 
 # =====================================================
-# MOVING AVERAGE
+# MOVING AVERAGE FUNCTION
 # =====================================================
 
 def moving_average_forecast(data, window=7, steps=30):
@@ -30,35 +31,7 @@ def moving_average_forecast(data, window=7, steps=30):
 
 
 # =====================================================
-# HOLT WINTERS FORECAST
-# =====================================================
-
-def hw_forecast(data, steps=30):
-
-    model = ExponentialSmoothing(
-        data['y'],
-        trend='add',
-        seasonal=None
-    ).fit()
-
-    pred = model.forecast(steps)
-
-    future_dates = pd.date_range(
-        start=data['ds'].max(),
-        periods=steps + 1,
-        freq='D'
-    )[1:]
-
-    forecast = pd.DataFrame({
-        'tanggal': future_dates,
-        'forecast': pred.values
-    })
-
-    return forecast
-
-
-# =====================================================
-# MAIN FUNCTION
+# MAIN FORECAST FUNCTION
 # =====================================================
 
 def run_forecast(file):
@@ -206,12 +179,33 @@ def run_forecast(file):
                 continue
 
             # =================================
-            # CLUSTER A -> HOLT WINTERS
+            # CLUSTER A -> PROPHET
             # =================================
 
             if kategori == 'A':
 
-                hasil = hw_forecast(ts)
+                model = Prophet(
+                    daily_seasonality=True,
+                    weekly_seasonality=True,
+                    yearly_seasonality=True
+                )
+
+                model.fit(ts)
+
+                future = model.make_future_dataframe(
+                    periods=30
+                )
+
+                forecast = model.predict(future)
+
+                hasil = forecast[
+                    ['ds', 'yhat']
+                ].tail(30)
+
+                hasil.columns = [
+                    'tanggal',
+                    'forecast'
+                ]
 
             # =================================
             # CLUSTER B -> EXP SMOOTHING
@@ -219,7 +213,24 @@ def run_forecast(file):
 
             elif kategori == 'B':
 
-                hasil = hw_forecast(ts)
+                model = ExponentialSmoothing(
+                    ts['y'],
+                    trend='add',
+                    seasonal=None
+                ).fit()
+
+                pred = model.forecast(30)
+
+                future_dates = pd.date_range(
+                    start=ts['ds'].max(),
+                    periods=31,
+                    freq='D'
+                )[1:]
+
+                hasil = pd.DataFrame({
+                    'tanggal': future_dates,
+                    'forecast': pred.values
+                })
 
             # =================================
             # CLUSTER C -> MOVING AVERAGE
