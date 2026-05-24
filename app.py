@@ -21,7 +21,8 @@ st.title("Inventory Forecast Dashboard")
 
 st.write(
     "Cluster-Based Forecasting menggunakan "
-    "Holt-Winters dan Moving Average"
+    "Prophet, Exponential Smoothing, "
+    "dan Moving Average"
 )
 
 # ==========================================
@@ -45,6 +46,10 @@ if uploaded_file:
 
     st.success("Forecast selesai!")
 
+    # ======================================
+    # TAMPILKAN DATA
+    # ======================================
+
     st.subheader("Hasil Forecast")
 
     st.dataframe(result)
@@ -63,6 +68,10 @@ if uploaded_file:
     filtered = result[
         result['id_produk'] == selected_produk
     ]
+
+    # ======================================
+    # INFO PRODUK
+    # ======================================
 
     kategori = filtered['kategori'].iloc[0]
 
@@ -86,7 +95,6 @@ if uploaded_file:
 
     ax.set_xlabel("Tanggal")
     ax.set_ylabel("Forecast")
-
     ax.set_title(
         f"Forecast Produk {selected_produk}"
     )
@@ -96,7 +104,7 @@ if uploaded_file:
     st.pyplot(fig)
 
     # ======================================
-    # DOWNLOAD
+    # DOWNLOAD BUTTON
     # ======================================
 
     csv = result.to_csv(index=False)
